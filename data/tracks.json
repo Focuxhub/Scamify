@@ -6,5 +6,77 @@
     "duration": "4:33",
     "fileUrl": "audio/deaf-kev-invincible.mp3",
     "uploadedAt": "2026-09-24"
+  },
+  {
+    "id": "2",
+    "title": "Fade",
+    "artist": "Alan Walker",
+    "duration": "4:20",
+    "fileUrl": "audio/alan-walker-fade.mp3",
+    "uploadedAt": "2026-09-24"
+  },
+  {
+    "id": "3",
+    "title": "Symbolism",
+    "artist": "Electro-Light",
+    "duration": "4:51",
+    "fileUrl": "audio/electro-light-symbolism.mp3",
+    "uploadedAt": "2026-09-24"
+  },
+  {
+    "id": "4",
+    "title": "Candyland",
+    "artist": "Tobu",
+    "duration": "3:18",
+    "fileUrl": "audio/tobu-candyland.mp3",
+    "uploadedAt": "2026-09-24"
+  },
+  {
+    "id": "5",
+    "title": "On & On (feat. Daniel Levi)",
+    "artist": "Cartoon",
+    "duration": "3:28",
+    "fileUrl": "audio/cartoon-on-and-on.mp3",
+    "uploadedAt": "2026-09-24"
+  },
+  {
+    "id": "6",
+    "title": "Heroes Tonight (feat. Johnning)",
+    "artist": "Janji",
+    "duration": "3:28",
+    "fileUrl": "audio/janji-heroes-tonight.mp3",
+    "uploadedAt": "2026-09-24"
+  },
+  {
+    "id": "7",
+    "title": "My Heart",
+    "artist": "Different Heaven & EH!DE",
+    "duration": "4:27",
+    "fileUrl": "audio/different-heaven-my-heart.mp3",
+    "uploadedAt": "2026-09-24"
+  },
+  {
+    "id": "8",
+    "title": "Eclipse",
+    "artist": "Jim Yosef",
+    "duration": "3:55",
+    "fileUrl": "audio/jim-yosef-eclipse.mp3",
+    "uploadedAt": "2026-09-24"
+  },
+  {
+    "id": "9",
+    "title": "Campfire",
+    "artist": "RetroVision",
+    "duration": "3:10",
+    "fileUrl": "audio/retrovision-campfire.mp3",
+    "uploadedAt": "2026-09-24"
+  },
+  {
+    "id": "10",
+    "title": "Blank",
+    "artist": "Disfigure",
+    "duration": "3:29",
+    "fileUrl": "audio/disfigure-blank.mp3",
+    "uploadedAt": "2026-09-24"
   }
 ]
