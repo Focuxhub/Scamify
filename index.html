@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Scamify — Free Music Platform</title>
     <style>
         :root {
@@ -14,7 +14,7 @@
             --text-main: #f4f4f5;
             --text-muted: #a1a1aa;
             --border: #27272a;
-            --glow: rgba(139, 92, 246, 0.15);
+            --glow: rgba(139, 92, 246, 0.2);
         }
 
         * {
@@ -22,6 +22,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -33,14 +34,14 @@
             overflow-x: hidden;
         }
 
-        /* Layout */
         .app-container {
             display: flex;
             flex: 1;
-            padding-bottom: 100px; /* Space for sticky player */
+            /* Bottom padding ensures content is never hidden behind player or mobile nav */
+            padding-bottom: 160px; 
         }
 
-        /* Sidebar (Desktop) */
+        /* Sidebar Navigation (Desktop) */
         sidebar {
             width: 260px;
             background-color: var(--surface-color);
@@ -52,6 +53,8 @@
             position: sticky;
             top: 0;
             height: 100vh;
+            flex-shrink: 0;
+            z-index: 50;
         }
 
         .logo-area {
@@ -61,18 +64,19 @@
         }
 
         .logo-icon {
-            width: 38px;
-            height: 38px;
+            width: 40px;
+            height: 40px;
             background: linear-gradient(135deg, var(--primary), #c084fc);
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: 0 0 20px var(--glow);
+            flex-shrink: 0;
         }
 
         .logo-text h1 {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             font-weight: 700;
             letter-spacing: -0.5px;
         }
@@ -92,7 +96,7 @@
             display: flex;
             align-items: center;
             gap: 14px;
-            padding: 12px 16px;
+            padding: 14px 16px;
             border-radius: 12px;
             color: var(--text-muted);
             text-decoration: none;
@@ -104,6 +108,7 @@
             background: none;
             width: 100%;
             text-align: left;
+            min-height: 48px; /* Touch target safety */
         }
 
         .nav-item:hover, .nav-item.active {
@@ -113,23 +118,23 @@
         }
 
         .nav-item svg {
-            width: 20px;
-            height: 20px;
+            width: 22px;
+            height: 22px;
             fill: currentColor;
+            flex-shrink: 0;
         }
 
-        /* Main Content */
         main {
             flex: 1;
-            padding: 36px;
-            max-width: 1300px;
+            padding: 32px;
+            max-width: 1400px;
             margin: 0 auto;
             width: 100%;
         }
 
         .view-section {
             display: none;
-            animation: fadeIn 0.25s ease-in-out;
+            animation: fadeIn 0.2s ease-in-out;
         }
 
         .view-section.active {
@@ -137,7 +142,7 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
+            from { opacity: 0; transform: translateY(4px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -157,17 +162,17 @@
         /* Search Bar */
         .search-bar {
             position: relative;
-            max-width: 400px;
+            max-width: 440px;
         }
 
         .search-bar input {
             width: 100%;
-            padding: 12px 16px 12px 44px;
+            padding: 14px 16px 14px 46px;
             background-color: var(--surface-color);
             border: 1px solid var(--border);
             border-radius: 12px;
             color: var(--text-main);
-            font-size: 0.95rem;
+            font-size: 1rem;
             outline: none;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
@@ -179,18 +184,18 @@
 
         .search-bar svg {
             position: absolute;
-            left: 14px;
+            left: 16px;
             top: 50%;
             transform: translateY(-50%);
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             fill: var(--text-muted);
         }
 
-        /* Scamlists (Playlists Grid) */
+        /* Scamlists Grid */
         .scamlists-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
             margin-bottom: 40px;
         }
@@ -207,6 +212,7 @@
             transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
             position: relative;
             overflow: hidden;
+            min-height: 96px;
         }
 
         .scamlist-card:hover {
@@ -244,7 +250,7 @@
             margin-top: 4px;
         }
 
-        /* Song Grid */
+        /* Song Grid & Cards */
         .song-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -298,8 +304,8 @@
             position: absolute;
             bottom: 12px;
             right: 12px;
-            width: 42px;
-            height: 42px;
+            width: 46px; /* Touch friendly >= 44px */
+            height: 46px;
             background-color: var(--primary);
             border: none;
             border-radius: 50%;
@@ -307,15 +313,24 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.4);
             opacity: 0;
             transform: translateY(8px);
             transition: all 0.2s ease;
         }
 
-        .song-card:hover .play-overlay-btn {
-            opacity: 1;
-            transform: translateY(0);
+        /* Always show overlay button on touch devices or hover */
+        @media (hover: hover) {
+            .song-card:hover .play-overlay-btn {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @media (hover: none) {
+            .play-overlay-btn {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .play-overlay-btn:hover {
@@ -324,8 +339,8 @@
         }
 
         .play-overlay-btn svg {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             fill: white;
             margin-left: 2px;
             opacity: 1;
@@ -358,7 +373,7 @@
         }
 
         .duration {
-            font-size: 0.75rem;
+            font-size: 0.78rem;
             color: var(--text-muted);
         }
 
@@ -367,11 +382,14 @@
             border: none;
             color: var(--text-muted);
             cursor: pointer;
-            padding: 6px;
-            border-radius: 8px;
+            padding: 10px; /* Generous touch target */
+            border-radius: 10px;
             display: flex;
             align-items: center;
+            justify-content: center;
             transition: color 0.2s, background-color 0.2s;
+            min-width: 44px;
+            min-height: 44px;
         }
 
         .action-btn:hover {
@@ -380,18 +398,17 @@
         }
 
         .action-btn svg {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             fill: currentColor;
         }
 
-        /* Upload Card */
         .upload-card {
             background-color: var(--surface-color);
             border: 1px solid var(--border);
             border-radius: 16px;
             padding: 28px;
-            max-width: 600px;
+            max-width: 640px;
             display: flex;
             flex-direction: column;
             gap: 20px;
@@ -410,14 +427,15 @@
         }
 
         .form-group input {
-            padding: 12px 16px;
+            padding: 14px 16px;
             background-color: var(--bg-color);
             border: 1px solid var(--border);
-            border-radius: 10px;
+            border-radius: 12px;
             color: var(--text-main);
-            font-size: 0.95rem;
+            font-size: 1rem;
             outline: none;
             transition: border-color 0.2s;
+            min-height: 48px;
         }
 
         .form-group input:focus {
@@ -429,12 +447,16 @@
             background-color: var(--primary);
             color: white;
             border: none;
-            padding: 14px 20px;
+            padding: 14px 24px;
             border-radius: 12px;
             font-weight: 600;
             font-size: 1rem;
             cursor: pointer;
             transition: background-color 0.2s, transform 0.1s;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .btn-primary:hover {
@@ -445,7 +467,6 @@
             transform: scale(0.98);
         }
 
-        /* Sticky Audio Player */
         .player-bar {
             position: fixed;
             bottom: 0;
@@ -457,8 +478,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 28px;
-            z-index: 1000;
+            padding: 0 24px;
+            z-index: 100;
             backdrop-filter: blur(16px);
         }
 
@@ -466,7 +487,8 @@
             display: flex;
             align-items: center;
             gap: 14px;
-            width: 280px;
+            max-width: 300px;
+            flex: 1;
         }
 
         .player-thumb {
@@ -487,16 +509,15 @@
         }
 
         .player-meta h4 {
-            font-size: 0.92rem;
+            font-size: 0.95rem;
             font-weight: 600;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            max-width: 200px;
         }
 
         .player-meta p {
-            font-size: 0.78rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
             white-space: nowrap;
             overflow: hidden;
@@ -508,15 +529,16 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             flex: 1;
             max-width: 520px;
+            margin: 0 20px;
         }
 
         .player-buttons {
             display: flex;
             align-items: center;
-            gap: 18px;
+            gap: 16px;
         }
 
         .control-btn {
@@ -528,6 +550,8 @@
             align-items: center;
             justify-content: center;
             transition: color 0.2s, transform 0.1s;
+            min-width: 44px;
+            min-height: 44px;
         }
 
         .control-btn:hover {
@@ -535,14 +559,14 @@
         }
 
         .control-btn svg {
-            width: 22px;
-            height: 22px;
+            width: 24px;
+            height: 24px;
             fill: currentColor;
         }
 
         .control-btn.main-play {
-            width: 40px;
-            height: 40px;
+            width: 46px;
+            height: 46px;
             background-color: var(--primary);
             border-radius: 50%;
             color: white;
@@ -554,8 +578,8 @@
         }
 
         .control-btn.main-play svg {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             fill: white;
             margin-left: 2px;
         }
@@ -568,41 +592,45 @@
         }
 
         .time-label {
-            font-size: 0.72rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
-            min-width: 34px;
+            min-width: 36px;
             text-align: center;
         }
 
         .progress-bar {
             flex: 1;
-            height: 5px;
+            height: 6px;
             background-color: var(--border);
             border-radius: 3px;
             position: relative;
             cursor: pointer;
+            padding: 6px 0; /* Expanded touch hit area vertically */
+            background-clip: content-box;
         }
 
         .progress-bar-fill {
-            height: 100%;
+            height: 6px;
             background-color: var(--primary);
             border-radius: 3px;
             width: 0%;
             position: relative;
         }
 
-        /* Mobile Bottom Navigation */
+        /* Mobile Bottom Navigation Bar */
         .mobile-nav {
             display: none;
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
+            height: 64px;
             background-color: var(--surface-color);
             border-top: 1px solid var(--border);
-            padding: 10px 0;
+            padding: 0 8px;
             justify-content: space-around;
-            z-index: 1001;
+            align-items: center;
+            z-index: 101;
             backdrop-filter: blur(12px);
         }
 
@@ -610,13 +638,16 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             gap: 4px;
             background: none;
             border: none;
             color: var(--text-muted);
-            font-size: 0.72rem;
+            font-size: 0.75rem;
             cursor: pointer;
             flex: 1;
+            height: 100%;
+            min-width: 44px;
         }
 
         .mobile-nav-item.active {
@@ -624,8 +655,8 @@
         }
 
         .mobile-nav-item svg {
-            width: 22px;
-            height: 22px;
+            width: 24px;
+            height: 24px;
             fill: currentColor;
         }
 
@@ -638,10 +669,9 @@
 
         .empty-state p {
             margin-top: 8px;
-            font-size: 0.92rem;
+            font-size: 0.95rem;
         }
 
-        /* Responsive Breakpoints */
         @media (max-width: 768px) {
             sidebar {
                 display: none;
@@ -650,23 +680,42 @@
                 display: flex;
             }
             main {
-                padding: 20px;
-                padding-bottom: 30px;
+                padding: 16px;
+                padding-bottom: 24px;
             }
             .app-container {
-                padding-bottom: 155px; /* Space for mobile nav + player bar */
+                /* Padding accounts for mobile-nav (64px) + player-bar (72px) */
+                padding-bottom: 145px; 
             }
             .player-bar {
-                bottom: 60px; /* Sits right above mobile navigation */
+                bottom: 64px; /* Sits exactly above the mobile navigation bar */
                 height: 72px;
                 padding: 0 16px;
             }
             .player-track-info {
-                width: auto;
-                flex: 1;
+                max-width: calc(100% - 70px);
             }
             .player-controls-center {
-                display: none; /* Hide advanced desktop seeker on small mobile screens */
+                display: none; /* Streamlined mobile player player-bar view */
+            }
+            .section-header h2 {
+                font-size: 1.6rem;
+            }
+            .scamlists-container {
+                grid-template-columns: 1fr;
+            }
+            .song-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            .song-card {
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .song-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -702,7 +751,7 @@
             </div>
         </sidebar>
 
-        <!-- Main Workspace -->
+        <!-- Main Content Area -->
         <main>
             <!-- Discover View -->
             <section id="view-discover" class="view-section active">
@@ -715,7 +764,7 @@
                 </div>
 
                 <!-- Scamlists Section -->
-                <div style="margin-bottom: 24px;">
+                <div style="margin-bottom: 32px;">
                     <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 16px;">Scamlists</h3>
                     <div class="scamlists-container">
                         <div class="scamlist-card" onclick="openScamlist('uploaded')">
@@ -776,7 +825,6 @@
         </main>
     </div>
 
-    <!-- Sticky Audio Player -->
     <div class="player-bar">
         <div class="player-track-info">
             <div class="player-thumb">
@@ -803,14 +851,14 @@
             </div>
         </div>
 
-        <div style="width: 140px; display: flex; justify-content: flex-end;">
-            <button class="control-btn" onclick="togglePlay()" id="mobile-play-btn" style="display:none;">
+        <div style="width: 140px; display: flex; justify-content: flex-end; align-items: center;">
+            <button class="control-btn main-play" onclick="togglePlay()" id="mobile-play-btn" style="display:none;" title="Play/Pause">
                 <svg id="mobile-play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </button>
         </div>
     </div>
 
-    <!-- Mobile Bottom Navigation -->
+    <!-- Mobile Bottom Navigation Bar -->
     <nav class="mobile-nav">
         <button class="mobile-nav-item active" id="m-btn-discover" onclick="switchView('discover', event)">
             <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
@@ -912,7 +960,7 @@
             if (type === 'uploaded') {
                 document.getElementById('grid-title').innerText = `Uploaded by Scamify (${allTracks.length} tracks)`;
                 renderDiscover(allTracks);
-                window.scrollTo({ top: 350, behavior: 'smooth' });
+                window.scrollTo({ top: 320, behavior: 'smooth' });
             }
         }
 
@@ -924,7 +972,6 @@
             document.getElementById('player-title').innerText = song.title;
             document.getElementById('player-artist').innerText = song.artist;
 
-            // Update playing card highlights
             document.querySelectorAll('.song-card').forEach(c => c.classList.remove('playing'));
             const activeCard = document.getElementById(`card-${song.id}`);
             if (activeCard) activeCard.classList.add('playing');
@@ -963,11 +1010,10 @@
 
         function updatePlayButtonIcon(isPlaying) {
             const icon = document.getElementById('play-icon');
-            if (isPlaying) {
-                icon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
-            } else {
-                icon.innerHTML = '<path d="M8 5v14l11-7z"/>';
-            }
+            const mobileIcon = document.getElementById('mobile-play-icon');
+            const htmlMarkup = isPlaying ? '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>' : '<path d="M8 5v14l11-7z"/>';
+            if (icon) icon.innerHTML = htmlMarkup;
+            if (mobileIcon) mobileIcon.innerHTML = htmlMarkup;
         }
 
         async function downloadSong(songId) {
@@ -1062,7 +1108,6 @@
             };
         }
 
-        // GitHub API Upload Handler
         async function handleGitHubUpload() {
             const token = document.getElementById('gh-token').value.trim();
             const repo = document.getElementById('gh-repo').value.trim();
@@ -1090,7 +1135,6 @@
                 const audioPath = `audio/${cleanFileName}`;
 
                 try {
-                    // 1. Upload MP3 to audio/ folder
                     const audioRes = await fetch(`https://api.github.com/repos/${repo}/contents/${audioPath}`, {
                         method: 'PUT',
                         headers: {
@@ -1105,7 +1149,6 @@
 
                     if (!audioRes.ok) throw new Error("Failed to upload MP3 to GitHub.");
 
-                    // 2. Fetch existing tracks.json
                     const jsonUrl = `https://api.github.com/repos/${repo}/contents/data/tracks.json`;
                     const getJsonRes = await fetch(jsonUrl, {
                         headers: { 'Authorization': `token ${token}` }
@@ -1124,7 +1167,6 @@
                         }
                     }
 
-                    // 3. Append new track
                     const newTrack = {
                         id: String(Date.now()),
                         title: title,
@@ -1135,7 +1177,6 @@
                     };
                     tracksList.push(newTrack);
 
-                    // 4. Update tracks.json on GitHub
                     const updatedContent = btoa(JSON.stringify(tracksList, null, 2));
                     const updateJsonRes = await fetch(jsonUrl, {
                         method: 'PUT',
@@ -1181,6 +1222,7 @@
             if (viewName === 'downloads') {
                 loadDownloadsView();
             }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         const audioEl = document.getElementById('audio-element');
