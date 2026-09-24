@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scamify - Free Music Platform</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">🎵 Scamify</div>
+        <nav>
+            <button class="nav-btn active" onclick="switchTab('discover')">Discover</button>
+            <button class="nav-btn" onclick="switchTab('downloads')">Downloads (<span id="download-count">0</span>)</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- DISCOVER PAGE -->
+        <section id="discover-page" class="page active">
+            <h2>Discover Random Beats</h2>
+            <p class="subtitle">Scam big corporations and enjoy our music for free!</p>
+            <div id="discover-container" class="track-grid">
+                <p class="loading">Loading tracks...</p>
+            </div>
+        </section>
+
+        <!-- DOWNLOADS PAGE -->
+        <section id="downloads-page" class="page">
+            <h2>Your Offline Library</h2>
+            <p class="subtitle">Songs saved locally via IndexedDB</p>
+            <div id="downloads-container" class="track-grid">
+                <p class="empty">No downloaded songs yet.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- AUDIO PLAYER BAR -->
+    <footer>
+        <div id="now-playing">Select a track to play</div>
+        <audio id="audio-player" controls style="display:none;"></audio>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
