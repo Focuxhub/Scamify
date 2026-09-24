@@ -3,44 +3,940 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scamify - Free Music Platform</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Scamify — Free Music Platform</title>
+    <style>
+        :root {
+            --bg-color: #09090b;
+            --surface-color: #121216;
+            --surface-hover: #1e1e24;
+            --primary: #8b5cf6;
+            --primary-hover: #7c3aed;
+            --text-main: #f4f4f5;
+            --text-muted: #a1a1aa;
+            --border: #27272a;
+            --glow: rgba(139, 92, 246, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Layout */
+        .app-container {
+            display: flex;
+            flex: 1;
+            padding-bottom: 90px; /* Space for sticky player */
+        }
+
+        /* Sidebar (Desktop) */
+        sidebar {
+            width: 260px;
+            background-color: var(--surface-color);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            gap: 32px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), #c084fc);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px var(--glow);
+        }
+
+        .logo-text h1 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text span {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background-color: var(--surface-hover);
+            color: var(--text-main);
+            box-shadow: inset 3px 0 0 var(--primary);
+        }
+
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            padding: 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .view-section {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .section-header h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        /* Search & Filters */
+        .search-bar {
+            position: relative;
+            max-width: 400px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px 16px 12px 44px;
+            background-color: var(--surface-color);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-bar input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--glow);
+        }
+
+        .search-bar svg {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            fill: var(--text-muted);
+        }
+
+        /* Song Grid */
+        .song-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .song-card {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .song-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px var(--glow);
+        }
+
+        .song-art {
+            width: 100%;
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #18181b, #27272a);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .song-art svg {
+            width: 48px;
+            height: 48px;
+            fill: var(--text-muted);
+            opacity: 0.5;
+        }
+
+        .play-overlay-btn {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            width: 42px;
+            height: 42px;
+            background-color: var(--primary);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            opacity: 0;
+            transform: translateY(8px);
+            transition: all 0.2s ease;
+        }
+
+        .song-card:hover .play-overlay-btn {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .play-overlay-btn:hover {
+            background-color: var(--primary-hover);
+            transform: scale(1.05);
+        }
+
+        .play-overlay-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: white;
+            margin-left: 2px;
+            opacity: 1;
+        }
+
+        .song-info h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .song-info p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-top: 4px;
+        }
+
+        .song-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: auto;
+            padding-top: 8px;
+            border-top: 1px solid var(--border);
+        }
+
+        .duration {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .download-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s, background-color 0.2s;
+        }
+
+        .download-btn:hover {
+            color: var(--primary);
+            background-color: var(--surface-hover);
+        }
+
+        .download-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        /* Sticky Audio Player */
+        .player-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background-color: var(--surface-color);
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            z-index: 1000;
+            backdrop-filter: blur(12px);
+        }
+
+        .player-track-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            width: 300px;
+        }
+
+        .player-thumb {
+            width: 48px;
+            height: 48px;
+            background: var(--border);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .player-thumb svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-muted);
+        }
+
+        .player-meta h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+
+        .player-meta p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .player-controls-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+            max-width: 500px;
+        }
+
+        .player-buttons {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: var(--text-main);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s, transform 0.1s;
+        }
+
+        .control-btn:hover {
+            color: var(--primary);
+        }
+
+        .control-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .control-btn.main-play {
+            width: 38px;
+            height: 38px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            color: white;
+        }
+
+        .control-btn.main-play:hover {
+            background-color: var(--primary-hover);
+            transform: scale(1.05);
+        }
+
+        .control-btn.main-play svg {
+            width: 16px;
+            height: 16px;
+            fill: white;
+            margin-left: 2px;
+        }
+
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .time-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            min-width: 32px;
+            text-align: center;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 4px;
+            background-color: var(--border);
+            border-radius: 2px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background-color: var(--primary);
+            border-radius: 2px;
+            width: 0%;
+            position: relative;
+        }
+
+        /* Mobile Bottom Navigation */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--surface-color);
+            border-top: 1px solid var(--border);
+            padding: 10px 0;
+            justify-content: space-around;
+            z-index: 1001;
+        }
+
+        .mobile-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+
+        .mobile-nav-item.active {
+            color: var(--primary);
+        }
+
+        .mobile-nav-item svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+
+        /* Empty states */
+        .empty-state {
+            text-align: center;
+            padding: 48px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state p {
+            margin-top: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 768px) {
+            sidebar {
+                display: none;
+            }
+            .mobile-nav {
+                display: flex;
+            }
+            main {
+                padding: 16px;
+            }
+            .player-bar {
+                bottom: 60px; /* Above mobile nav */
+                height: 70px;
+                padding: 0 16px;
+            }
+            .player-track-info {
+                width: auto;
+                flex: 1;
+            }
+            .player-controls-center {
+                display: none; /* Hide advanced controls on small mobile screens */
+            }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <div class="logo">🎵 Scamify</div>
-        <nav>
-            <button class="nav-btn active" onclick="switchTab('discover')">Discover</button>
-            <button class="nav-btn" onclick="switchTab('downloads')">Downloads (<span id="download-count">0</span>)</button>
-        </nav>
-    </header>
 
-    <main>
-        <!-- DISCOVER PAGE -->
-        <section id="discover-page" class="page active">
-            <h2>Discover Random Beats</h2>
-            <p class="subtitle">Scam big corporations and enjoy our music for free!</p>
-            <div id="discover-container" class="track-grid">
-                <p class="loading">Loading tracks...</p>
+    <div class="app-container">
+        <!-- Sidebar Navigation (Desktop) -->
+        <sidebar>
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                </div>
+                <div class="logo-text">
+                    <h1>Scamify</h1>
+                    <span>FocuxHub Platform</span>
+                </div>
             </div>
-        </section>
 
-        <!-- DOWNLOADS PAGE -->
-        <section id="downloads-page" class="page">
-            <h2>Your Offline Library</h2>
-            <p class="subtitle">Songs saved locally via IndexedDB</p>
-            <div id="downloads-container" class="track-grid">
-                <p class="empty">No downloaded songs yet.</p>
+            <div class="nav-menu">
+                <button class="nav-item active" onclick="switchView('discover')">
+                    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                    Discover
+                </button>
+                <button class="nav-item" onclick="switchView('downloads')">
+                    <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                    Downloads (<span id="download-count">0</span>)
+                </button>
             </div>
-        </section>
-    </main>
+        </sidebar>
 
-    <!-- AUDIO PLAYER BAR -->
-    <footer>
-        <div id="now-playing">Select a track to play</div>
-        <audio id="audio-player" controls style="display:none;"></audio>
-    </footer>
+        <!-- Main Workspace -->
+        <main>
+            <!-- Discover View -->
+            <section id="view-discover" class="view-section active">
+                <div class="section-header">
+                    <h2>Discover Music</h2>
+                    <div class="search-bar">
+                        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                        <input type="text" id="search-input" placeholder="Search by title or artist..." oninput="filterSongs()">
+                    </div>
+                </div>
+                <div id="discover-grid" class="song-grid">
+                    <!-- Populated dynamically -->
+                </div>
+            </section>
 
-    <script src="script.js"></script>
+            <!-- Downloads View -->
+            <section id="view-downloads" class="view-section">
+                <div class="section-header">
+                    <h2>Offline Downloads</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Cached locally in your browser via IndexedDB.</p>
+                </div>
+                <div id="downloads-grid" class="song-grid">
+                    <!-- Populated dynamically -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Sticky Audio Player -->
+    <div class="player-bar">
+        <div class="player-track-info">
+            <div class="player-thumb">
+                <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+            </div>
+            <div class="player-meta">
+                <h4 id="player-title">Select a track</h4>
+                <p id="player-artist">FocuxHub</p>
+            </div>
+        </div>
+
+        <div class="player-controls-center">
+            <div class="player-buttons">
+                <button class="control-btn" onclick="togglePlay()">
+                    <svg id="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+            </div>
+            <div class="progress-container">
+                <span class="time-label" id="current-time">0:00</span>
+                <div class="progress-bar" id="progress-bar" onclick="seekAudio(event)">
+                    <div class="progress-bar-fill" id="progress-fill"></div>
+                </div>
+                <span class="time-label" id="duration-label">0:00</span>
+            </div>
+        </div>
+
+        <div style="width: 150px; display: flex; justify-content: flex-end;">
+            <!-- Placeholder for balance -->
+        </div>
+    </div>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-nav">
+        <button class="mobile-nav-item active" id="m-btn-discover" onclick="switchView('discover')">
+            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            Discover
+        </button>
+        <button class="mobile-nav-item" id="m-btn-downloads" onclick="switchView('downloads')">
+            <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            Downloads
+        </button>
+    </nav>
+
+    <!-- Hidden audio element -->
+    <audio id="audio-element"></audio>
+
+    <script>
+        // Sample fallback tracks if tracks.json is unreachable
+        const fallbackTracks = [
+            { id: "1", title: "First Garage Beat", artist: "FocuxHub Community", duration: "3:45", fileUrl: "audio/first-garage-beat.mp3" },
+            { id: "2", title: "Cyberpunk Terminal", artist: "ByteRunner", duration: "2:50", fileUrl: "audio/cyberpunk-terminal.mp3" },
+            { id: "3", title: "Midnight Protocol", artist: "NullSec", duration: "4:12", fileUrl: "audio/midnight-protocol.mp3" }
+        ];
+
+        let allTracks = [];
+        let currentPlayingSong = null;
+        let db = null;
+
+        // Initialize IndexedDB
+        function initDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open("ScamifyOfflineDB", 1);
+                request.onerror = () => reject(request.error);
+                request.onsuccess = () => {
+                    db = request.result;
+                    updateDownloadCount();
+                    resolve(db);
+                };
+                request.onupgradeneeded = (event) => {
+                    const database = event.target.result;
+                    if (!database.objectStoreNames.contains("downloads")) {
+                        database.createObjectStore("downloads", { keyPath: "id" });
+                    }
+                };
+            });
+        }
+
+        // Load tracks on startup
+        async function loadTracks() {
+            try {
+                const response = await fetch('data/tracks.json');
+                if (!response.ok) throw new Error("Failed to load tracks.json");
+                allTracks = await response.json();
+            } catch (err) {
+                console.warn("Using fallback track list:", err);
+                allTracks = fallbackTracks;
+            }
+            
+            // Shuffle tracks randomly for Discover view
+            const shuffled = [...allTracks].sort(() => Math.random() - 0.5);
+            renderDiscover(shuffled);
+        }
+
+        // Render Discover Grid
+        function renderDiscover(tracks) {
+            const grid = document.getElementById('discover-grid');
+            if (tracks.length === 0) {
+                grid.innerHTML = `<div class="empty-state"><p>No tracks found.</p></div>`;
+                return;
+            }
+
+            grid.innerHTML = tracks.map(song => `
+                <div class="song-card">
+                    <div class="song-art">
+                        <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                        <button class="play-overlay-btn" onclick="playSong('${song.id}')" title="Play">
+                            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        </button>
+                    </div>
+                    <div class="song-info">
+                        <h3>${escapeHtml(song.title)}</h3>
+                        <p>${escapeHtml(song.artist)}</p>
+                    </div>
+                    <div class="song-actions">
+                        <span class="duration">${song.duration || '3:30'}</span>
+                        <button class="download-btn" onclick="downloadSong('${song.id}')" title="Download for Offline">
+                            <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter search
+        function filterSongs() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const filtered = allTracks.filter(s => 
+                s.title.toLowerCase().includes(query) || s.artist.toLowerCase().includes(query)
+            );
+            renderDiscover(filtered);
+        }
+
+        // Play song logic
+        async function playSong(songId) {
+            let song = allTracks.find(s => s.id === songId);
+            if (!song) return;
+
+            currentPlayingSong = song;
+            document.getElementById('player-title').innerText = song.title;
+            document.getElementById('player-artist').innerText = song.artist;
+
+            const audioElement = document.getElementById('audio-element');
+            
+            // Check if downloaded in IndexedDB first for instant offline playback
+            try {
+                const cached = await getSongFromDB(song.id);
+                if (cached && cached.blob) {
+                    audioElement.src = URL.createObjectURL(cached.blob);
+                } else {
+                    audioElement.src = song.fileUrl;
+                }
+            } catch (e) {
+                audioElement.src = song.fileUrl;
+            }
+
+            audioElement.play();
+            updatePlayButtonIcon(true);
+        }
+
+        // Toggle Play / Pause
+        function togglePlay() {
+            const audioElement = document.getElementById('audio-element');
+            if (!currentPlayingSong && allTracks.length > 0) {
+                playSong(allTracks[0].id);
+                return;
+            }
+
+            if (audioElement.paused) {
+                audioElement.play();
+                updatePlayButtonIcon(true);
+            } else {
+                audioElement.pause();
+                updatePlayButtonIcon(false);
+            }
+        }
+
+        function updatePlayButtonIcon(isPlaying) {
+            const icon = document.getElementById('play-icon');
+            if (isPlaying) {
+                icon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+            } else {
+                icon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+            }
+        }
+
+        // Download song into IndexedDB
+        async function downloadSong(songId) {
+            const song = allTracks.find(s => s.id === songId);
+            if (!song) return;
+
+            try {
+                const response = await fetch(song.fileUrl);
+                if (!response.ok) throw new Error("Network response failed");
+                const blob = await response.blob();
+
+                const tx = db.transaction("downloads", "readwrite");
+                const store = tx.objectStore("downloads");
+                store.put({ ...song, blob: blob });
+
+                tx.oncomplete = () => {
+                    alert(`Successfully downloaded "${song.title}" for offline playback!`);
+                    updateDownloadCount();
+                    if (document.getElementById('view-downloads').classList.contains('active')) {
+                        loadDownloadsView();
+                    }
+                };
+            } catch (err) {
+                console.error("Download error:", err);
+                alert("Could not download file (demo mode protection or missing file).");
+            }
+        }
+
+        function getSongFromDB(id) {
+            return new Promise((resolve, reject) => {
+                if (!db) return resolve(null);
+                const tx = db.transaction("downloads", "readonly");
+                const store = tx.objectStore("downloads");
+                const req = store.get(id);
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = () => reject(req.error);
+            });
+        }
+
+        async function loadDownloadsView() {
+            if (!db) return;
+            const tx = db.transaction("downloads", "readonly");
+            const store = tx.objectStore("downloads");
+            const req = store.getAll();
+
+            req.onsuccess = () => {
+                const downloads = req.result;
+                const grid = document.getElementById('downloads-grid');
+
+                if (downloads.length === 0) {
+                    grid.innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24" width="48" height="48" fill="var(--text-muted)"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg><p>No offline songs downloaded yet.</p></div>`;
+                    return;
+                }
+
+                grid.innerHTML = downloads.map(song => `
+                    <div class="song-card">
+                        <div class="song-art">
+                            <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                            <button class="play-overlay-btn" onclick="playSong('${song.id}')" title="Play">
+                                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </button>
+                        </div>
+                        <div class="song-info">
+                            <h3>${escapeHtml(song.title)}</h3>
+                            <p>${escapeHtml(song.artist)} (Offline)</p>
+                        </div>
+                        <div class="song-actions">
+                            <span class="duration">${song.duration || '3:30'}</span>
+                            <button class="download-btn" onclick="removeDownload('${song.id}')" title="Remove download" style="color: #ef4444;">
+                                <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            };
+        }
+
+        async function removeDownload(id) {
+            const tx = db.transaction("downloads", "readwrite");
+            const store = tx.objectStore("downloads");
+            store.delete(id);
+            tx.oncomplete = () => {
+                updateDownloadCount();
+                loadDownloadsView();
+            };
+        }
+
+        function updateDownloadCount() {
+            if (!db) return;
+            const tx = db.transaction("downloads", "readonly");
+            const store = tx.objectStore("downloads");
+            const req = store.count();
+            req.onsuccess = () => {
+                const count = req.result;
+                document.getElementById('download-count').innerText = count;
+            };
+        }
+
+        // View Switcher
+        function switchView(viewName) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.mobile-nav-item').forEach(el => el.classList.remove('active'));
+
+            if (viewName === 'discover') {
+                document.getElementById('view-discover').classList.add('active');
+                event?.currentTarget?.classList?.add('active');
+                document.getElementById('m-btn-discover').classList.add('active');
+            } else if (viewName === 'downloads') {
+                document.getElementById('view-downloads').classList.add('active');
+                event?.currentTarget?.classList?.add('active');
+                document.getElementById('m-btn-downloads').classList.add('active');
+                loadDownloadsView();
+            }
+        }
+
+        // Audio progress listener
+        const audioEl = document.getElementById('audio-element');
+        audioEl.addEventListener('timeupdate', () => {
+            if (audioEl.duration) {
+                const progressPercent = (audioEl.currentTime / audioEl.duration) * 100;
+                document.getElementById('progress-fill').style.width = progressPercent + '%';
+                document.getElementById('current-time').innerText = formatTime(audioEl.currentTime);
+                document.getElementById('duration-label').innerText = formatTime(audioEl.duration);
+            }
+        });
+
+        function seekAudio(event) {
+            const bar = document.getElementById('progress-bar');
+            const rect = bar.getBoundingClientRect();
+            const pos = (event.clientX - rect.left) / rect.width;
+            if (audioEl.duration) {
+                audioEl.currentTime = pos * audioEl.duration;
+            }
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+
+        // Initialize App on load
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                await initDB();
+            } catch (e) {
+                console.error("IndexedDB init failed:", e);
+            }
+            loadTracks();
+        });
+    </script>
 </body>
 </html>
