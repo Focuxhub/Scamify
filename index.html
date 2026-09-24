@@ -37,7 +37,7 @@
         .app-container {
             display: flex;
             flex: 1;
-            padding-bottom: 90px;
+            padding-bottom: 100px; /* Space for sticky player */
         }
 
         /* Sidebar (Desktop) */
@@ -49,6 +49,9 @@
             flex-direction: column;
             padding: 24px;
             gap: 32px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
         }
 
         .logo-area {
@@ -58,10 +61,10 @@
         }
 
         .logo-icon {
-            width: 36px;
-            height: 36px;
+            width: 38px;
+            height: 38px;
             background: linear-gradient(135deg, var(--primary), #c084fc);
-            border-radius: 10px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -118,15 +121,15 @@
         /* Main Content */
         main {
             flex: 1;
-            padding: 32px;
-            max-width: 1200px;
+            padding: 36px;
+            max-width: 1300px;
             margin: 0 auto;
             width: 100%;
         }
 
         .view-section {
             display: none;
-            animation: fadeIn 0.3s ease-in-out;
+            animation: fadeIn 0.25s ease-in-out;
         }
 
         .view-section.active {
@@ -142,16 +145,16 @@
             display: flex;
             flex-direction: column;
             gap: 16px;
-            margin-bottom: 24px;
+            margin-bottom: 28px;
         }
 
         .section-header h2 {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: 700;
             letter-spacing: -0.5px;
         }
 
-        /* Search & Filters */
+        /* Search Bar */
         .search-bar {
             position: relative;
             max-width: 400px;
@@ -166,7 +169,7 @@
             color: var(--text-main);
             font-size: 0.95rem;
             outline: none;
-            transition: border-color 0.2s;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
         .search-bar input:focus {
@@ -182,6 +185,63 @@
             width: 18px;
             height: 18px;
             fill: var(--text-muted);
+        }
+
+        /* Scamlists (Playlists Grid) */
+        .scamlists-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .scamlist-card {
+            background: linear-gradient(135deg, var(--surface-color), #18181f);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scamlist-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary);
+            box-shadow: 0 8px 24px var(--glow);
+        }
+
+        .scamlist-thumb {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), #4c1d95);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+
+        .scamlist-thumb svg {
+            width: 28px;
+            height: 28px;
+            fill: white;
+        }
+
+        .scamlist-info h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        .scamlist-info p {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-top: 4px;
         }
 
         /* Song Grid */
@@ -210,11 +270,16 @@
             box-shadow: 0 10px 30px var(--glow);
         }
 
+        .song-card.playing {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+
         .song-art {
             width: 100%;
             aspect-ratio: 1;
             background: linear-gradient(135deg, #18181b, #27272a);
-            border-radius: 10px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -226,7 +291,7 @@
             width: 48px;
             height: 48px;
             fill: var(--text-muted);
-            opacity: 0.5;
+            opacity: 0.4;
         }
 
         .play-overlay-btn {
@@ -242,7 +307,7 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
             opacity: 0;
             transform: translateY(8px);
             transition: all 0.2s ease;
@@ -297,7 +362,7 @@
             color: var(--text-muted);
         }
 
-        .download-btn {
+        .action-btn {
             background: none;
             border: none;
             color: var(--text-muted);
@@ -309,23 +374,23 @@
             transition: color 0.2s, background-color 0.2s;
         }
 
-        .download-btn:hover {
+        .action-btn:hover {
             color: var(--primary);
             background-color: var(--surface-hover);
         }
 
-        .download-btn svg {
+        .action-btn svg {
             width: 18px;
             height: 18px;
             fill: currentColor;
         }
 
-        /* Upload Form Styles */
+        /* Upload Card */
         .upload-card {
             background-color: var(--surface-color);
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 24px;
+            padding: 28px;
             max-width: 600px;
             display: flex;
             flex-direction: column;
@@ -352,6 +417,7 @@
             color: var(--text-main);
             font-size: 0.95rem;
             outline: none;
+            transition: border-color 0.2s;
         }
 
         .form-group input:focus {
@@ -363,9 +429,10 @@
             background-color: var(--primary);
             color: white;
             border: none;
-            padding: 12px 20px;
-            border-radius: 10px;
+            padding: 14px 20px;
+            border-radius: 12px;
             font-weight: 600;
+            font-size: 1rem;
             cursor: pointer;
             transition: background-color 0.2s, transform 0.1s;
         }
@@ -384,32 +451,33 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 80px;
+            height: 84px;
             background-color: var(--surface-color);
             border-top: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 24px;
+            padding: 0 28px;
             z-index: 1000;
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
         }
 
         .player-track-info {
             display: flex;
             align-items: center;
             gap: 14px;
-            width: 300px;
+            width: 280px;
         }
 
         .player-thumb {
-            width: 48px;
-            height: 48px;
+            width: 50px;
+            height: 50px;
             background: var(--border);
-            border-radius: 8px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
         .player-thumb svg {
@@ -419,7 +487,7 @@
         }
 
         .player-meta h4 {
-            font-size: 0.9rem;
+            font-size: 0.92rem;
             font-weight: 600;
             white-space: nowrap;
             overflow: hidden;
@@ -428,26 +496,27 @@
         }
 
         .player-meta p {
-            font-size: 0.75rem;
+            font-size: 0.78rem;
             color: var(--text-muted);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            margin-top: 2px;
         }
 
         .player-controls-center {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             flex: 1;
-            max-width: 500px;
+            max-width: 520px;
         }
 
         .player-buttons {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 18px;
         }
 
         .control-btn {
@@ -466,14 +535,14 @@
         }
 
         .control-btn svg {
-            width: 20px;
-            height: 20px;
+            width: 22px;
+            height: 22px;
             fill: currentColor;
         }
 
         .control-btn.main-play {
-            width: 38px;
-            height: 38px;
+            width: 40px;
+            height: 40px;
             background-color: var(--primary);
             border-radius: 50%;
             color: white;
@@ -481,12 +550,12 @@
 
         .control-btn.main-play:hover {
             background-color: var(--primary-hover);
-            transform: scale(1.05);
+            transform: scale(1.06);
         }
 
         .control-btn.main-play svg {
-            width: 16px;
-            height: 16px;
+            width: 18px;
+            height: 18px;
             fill: white;
             margin-left: 2px;
         }
@@ -494,22 +563,22 @@
         .progress-container {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             width: 100%;
         }
 
         .time-label {
-            font-size: 0.7rem;
+            font-size: 0.72rem;
             color: var(--text-muted);
-            min-width: 32px;
+            min-width: 34px;
             text-align: center;
         }
 
         .progress-bar {
             flex: 1;
-            height: 4px;
+            height: 5px;
             background-color: var(--border);
-            border-radius: 2px;
+            border-radius: 3px;
             position: relative;
             cursor: pointer;
         }
@@ -517,7 +586,7 @@
         .progress-bar-fill {
             height: 100%;
             background-color: var(--primary);
-            border-radius: 2px;
+            border-radius: 3px;
             width: 0%;
             position: relative;
         }
@@ -534,6 +603,7 @@
             padding: 10px 0;
             justify-content: space-around;
             z-index: 1001;
+            backdrop-filter: blur(12px);
         }
 
         .mobile-nav-item {
@@ -544,8 +614,9 @@
             background: none;
             border: none;
             color: var(--text-muted);
-            font-size: 0.7rem;
+            font-size: 0.72rem;
             cursor: pointer;
+            flex: 1;
         }
 
         .mobile-nav-item.active {
@@ -562,13 +633,15 @@
             text-align: center;
             padding: 48px 20px;
             color: var(--text-muted);
+            grid-column: 1 / -1;
         }
 
         .empty-state p {
             margin-top: 8px;
-            font-size: 0.9rem;
+            font-size: 0.92rem;
         }
 
+        /* Responsive Breakpoints */
         @media (max-width: 768px) {
             sidebar {
                 display: none;
@@ -577,11 +650,15 @@
                 display: flex;
             }
             main {
-                padding: 16px;
+                padding: 20px;
+                padding-bottom: 30px;
+            }
+            .app-container {
+                padding-bottom: 155px; /* Space for mobile nav + player bar */
             }
             .player-bar {
-                bottom: 60px;
-                height: 70px;
+                bottom: 60px; /* Sits right above mobile navigation */
+                height: 72px;
                 padding: 0 16px;
             }
             .player-track-info {
@@ -589,7 +666,7 @@
                 flex: 1;
             }
             .player-controls-center {
-                display: none;
+                display: none; /* Hide advanced desktop seeker on small mobile screens */
             }
         }
     </style>
@@ -601,7 +678,7 @@
         <sidebar>
             <div class="logo-area">
                 <div class="logo-icon">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="white"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
                 </div>
                 <div class="logo-text">
                     <h1>Scamify</h1>
@@ -636,6 +713,24 @@
                         <input type="text" id="search-input" placeholder="Search by title or artist..." oninput="filterSongs()">
                     </div>
                 </div>
+
+                <!-- Scamlists Section -->
+                <div style="margin-bottom: 24px;">
+                    <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 16px;">Scamlists</h3>
+                    <div class="scamlists-container">
+                        <div class="scamlist-card" onclick="openScamlist('uploaded')">
+                            <div class="scamlist-thumb">
+                                <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                            </div>
+                            <div class="scamlist-info">
+                                <h3>Uploaded by Scamify</h3>
+                                <p>All tracks in audio folder</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 id="grid-title" style="font-size: 1.25rem; font-weight: 600; margin-bottom: 16px;">All Tracks</h3>
                 <div id="discover-grid" class="song-grid"></div>
             </section>
 
@@ -652,7 +747,7 @@
                     </div>
                     <div class="form-group">
                         <label>Repository Owner / Name</label>
-                        <input type="text" id="gh-repo" value="focuxhub/scamify" placeholder="owner/repo">
+                        <input type="text" id="gh-repo" value="FocuxHub/Scamify" placeholder="owner/repo">
                     </div>
                     <div class="form-group">
                         <label>Song Title</label>
@@ -708,7 +803,11 @@
             </div>
         </div>
 
-        <div style="width: 150px;"></div>
+        <div style="width: 140px; display: flex; justify-content: flex-end;">
+            <button class="control-btn" onclick="togglePlay()" id="mobile-play-btn" style="display:none;">
+                <svg id="mobile-play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+        </div>
     </div>
 
     <!-- Mobile Bottom Navigation -->
@@ -731,7 +830,9 @@
 
     <script>
         const fallbackTracks = [
-            { id: "1", title: "First Garage Beat", artist: "FocuxHub Community", duration: "3:45", fileUrl: "audio/first-garage-beat.mp3" }
+            { id: "1", title: "Invincible", artist: "DEAF KEV", duration: "4:33", fileUrl: "audio/deaf-kev-invincible.mp3" },
+            { id: "2", title: "Fade", artist: "Alan Walker", duration: "4:20", fileUrl: "audio/alan-walker-fade.mp3" },
+            { id: "3", title: "Symbolism", artist: "Electro-Light", duration: "4:51", fileUrl: "audio/electro-light-symbolism.mp3" }
         ];
 
         let allTracks = [];
@@ -777,7 +878,7 @@
             }
 
             grid.innerHTML = tracks.map(song => `
-                <div class="song-card">
+                <div class="song-card ${currentPlayingSong && currentPlayingSong.id === song.id ? 'playing' : ''}" id="card-${song.id}">
                     <div class="song-art">
                         <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
                         <button class="play-overlay-btn" onclick="playSong('${song.id}')" title="Play">
@@ -790,7 +891,7 @@
                     </div>
                     <div class="song-actions">
                         <span class="duration">${song.duration || '3:30'}</span>
-                        <button class="download-btn" onclick="downloadSong('${song.id}')" title="Download for Offline">
+                        <button class="action-btn" onclick="downloadSong('${song.id}')" title="Download for Offline">
                             <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
                         </button>
                     </div>
@@ -800,10 +901,19 @@
 
         function filterSongs() {
             const query = document.getElementById('search-input').value.toLowerCase();
+            document.getElementById('grid-title').innerText = query ? `Search Results` : `All Tracks`;
             const filtered = allTracks.filter(s => 
                 s.title.toLowerCase().includes(query) || s.artist.toLowerCase().includes(query)
             );
             renderDiscover(filtered);
+        }
+
+        function openScamlist(type) {
+            if (type === 'uploaded') {
+                document.getElementById('grid-title').innerText = `Uploaded by Scamify (${allTracks.length} tracks)`;
+                renderDiscover(allTracks);
+                window.scrollTo({ top: 350, behavior: 'smooth' });
+            }
         }
 
         async function playSong(songId) {
@@ -813,6 +923,11 @@
             currentPlayingSong = song;
             document.getElementById('player-title').innerText = song.title;
             document.getElementById('player-artist').innerText = song.artist;
+
+            // Update playing card highlights
+            document.querySelectorAll('.song-card').forEach(c => c.classList.remove('playing'));
+            const activeCard = document.getElementById(`card-${song.id}`);
+            if (activeCard) activeCard.classList.add('playing');
 
             const audioElement = document.getElementById('audio-element');
             try {
@@ -918,7 +1033,7 @@
                         </div>
                         <div class="song-actions">
                             <span class="duration">${song.duration || '3:30'}</span>
-                            <button class="download-btn" onclick="removeDownload('${song.id}')" title="Remove" style="color: #ef4444;">
+                            <button class="action-btn" onclick="removeDownload('${song.id}')" title="Remove" style="color: #ef4444;">
                                 <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
                             </button>
                         </div>
@@ -990,7 +1105,7 @@
 
                     if (!audioRes.ok) throw new Error("Failed to upload MP3 to GitHub.");
 
-                    // 2. Fetch existing tracks.json to get sha and current array
+                    // 2. Fetch existing tracks.json
                     const jsonUrl = `https://api.github.com/repos/${repo}/contents/data/tracks.json`;
                     const getJsonRes = await fetch(jsonUrl, {
                         headers: { 'Authorization': `token ${token}` }
@@ -1009,7 +1124,7 @@
                         }
                     }
 
-                    // 3. Append new track to array
+                    // 3. Append new track
                     const newTrack = {
                         id: String(Date.now()),
                         title: title,
