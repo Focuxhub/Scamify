@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scamify — Free Music Platform</title>
     <style>
         :root {
@@ -14,7 +14,7 @@
             --text-main: #f4f4f5;
             --text-muted: #a1a1aa;
             --border: #27272a;
-            --glow: rgba(139, 92, 246, 0.2);
+            --glow: rgba(139, 92, 246, 0.15);
         }
 
         * {
@@ -34,14 +34,14 @@
             overflow-x: hidden;
         }
 
+        /* Layout */
         .app-container {
             display: flex;
             flex: 1;
-            /* Bottom padding ensures content is never hidden behind player or mobile nav */
-            padding-bottom: 160px; 
+            padding-bottom: 120px; /* Space for sticky player on desktop */
         }
 
-        /* Sidebar Navigation (Desktop) */
+        /* Sidebar (Desktop) */
         sidebar {
             width: 260px;
             background-color: var(--surface-color);
@@ -54,7 +54,6 @@
             top: 0;
             height: 100vh;
             flex-shrink: 0;
-            z-index: 50;
         }
 
         .logo-area {
@@ -64,19 +63,18 @@
         }
 
         .logo-icon {
-            width: 40px;
-            height: 40px;
+            width: 38px;
+            height: 38px;
             background: linear-gradient(135deg, var(--primary), #c084fc);
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: 0 0 20px var(--glow);
-            flex-shrink: 0;
         }
 
         .logo-text h1 {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             font-weight: 700;
             letter-spacing: -0.5px;
         }
@@ -96,7 +94,7 @@
             display: flex;
             align-items: center;
             gap: 14px;
-            padding: 14px 16px;
+            padding: 12px 16px;
             border-radius: 12px;
             color: var(--text-muted);
             text-decoration: none;
@@ -108,7 +106,7 @@
             background: none;
             width: 100%;
             text-align: left;
-            min-height: 48px; /* Touch target safety */
+            min-height: 44px;
         }
 
         .nav-item:hover, .nav-item.active {
@@ -118,16 +116,17 @@
         }
 
         .nav-item svg {
-            width: 22px;
-            height: 22px;
+            width: 20px;
+            height: 20px;
             fill: currentColor;
             flex-shrink: 0;
         }
 
+        /* Main Content */
         main {
             flex: 1;
-            padding: 32px;
-            max-width: 1400px;
+            padding: 36px;
+            max-width: 1300px;
             margin: 0 auto;
             width: 100%;
         }
@@ -162,19 +161,20 @@
         /* Search Bar */
         .search-bar {
             position: relative;
-            max-width: 440px;
+            max-width: 400px;
         }
 
         .search-bar input {
             width: 100%;
-            padding: 14px 16px 14px 46px;
+            padding: 12px 16px 12px 44px;
             background-color: var(--surface-color);
             border: 1px solid var(--border);
             border-radius: 12px;
             color: var(--text-main);
-            font-size: 1rem;
+            font-size: 0.95rem;
             outline: none;
             transition: border-color 0.2s, box-shadow 0.2s;
+            min-height: 44px;
         }
 
         .search-bar input:focus {
@@ -184,46 +184,47 @@
 
         .search-bar svg {
             position: absolute;
-            left: 16px;
+            left: 14px;
             top: 50%;
             transform: translateY(-50%);
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             fill: var(--text-muted);
         }
 
         /* Scamlists Grid */
         .scamlists-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+            margin-bottom: 36px;
         }
 
         .scamlist-card {
             background: linear-gradient(135deg, var(--surface-color), #18181f);
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 20px;
+            padding: 18px;
             display: flex;
             align-items: center;
             gap: 16px;
             cursor: pointer;
             transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
-            position: relative;
-            overflow: hidden;
-            min-height: 96px;
+            min-height: 80px;
+        }
+
+        .scamlist-card:active {
+            transform: scale(0.98);
         }
 
         .scamlist-card:hover {
-            transform: translateY(-3px);
             border-color: var(--primary);
             box-shadow: 0 8px 24px var(--glow);
         }
 
         .scamlist-thumb {
-            width: 60px;
-            height: 60px;
+            width: 52px;
+            height: 52px;
             background: linear-gradient(135deg, var(--primary), #4c1d95);
             border-radius: 12px;
             display: flex;
@@ -234,46 +235,39 @@
         }
 
         .scamlist-thumb svg {
-            width: 28px;
-            height: 28px;
+            width: 24px;
+            height: 24px;
             fill: white;
         }
 
         .scamlist-info h3 {
-            font-size: 1.05rem;
+            font-size: 1.02rem;
             font-weight: 600;
         }
 
         .scamlist-info p {
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
-            margin-top: 4px;
+            margin-top: 3px;
         }
 
-        /* Song Grid & Cards */
+        /* Song Grid */
         .song-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 16px;
         }
 
         .song-card {
             background-color: var(--surface-color);
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 16px;
+            padding: 14px;
             display: flex;
             flex-direction: column;
             gap: 12px;
             transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
             position: relative;
-            overflow: hidden;
-        }
-
-        .song-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--primary);
-            box-shadow: 0 10px 30px var(--glow);
         }
 
         .song-card.playing {
@@ -294,18 +288,18 @@
         }
 
         .song-art svg {
-            width: 48px;
-            height: 48px;
+            width: 42px;
+            height: 42px;
             fill: var(--text-muted);
-            opacity: 0.4;
+            opacity: 0.35;
         }
 
         .play-overlay-btn {
             position: absolute;
-            bottom: 12px;
-            right: 12px;
-            width: 46px; /* Touch friendly >= 44px */
-            height: 46px;
+            bottom: 10px;
+            right: 10px;
+            width: 44px;
+            height: 44px;
             background-color: var(--primary);
             border: none;
             border-radius: 50%;
@@ -313,29 +307,12 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.4);
-            opacity: 0;
-            transform: translateY(8px);
-            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            transition: transform 0.15s ease, background-color 0.15s;
         }
 
-        /* Always show overlay button on touch devices or hover */
-        @media (hover: hover) {
-            .song-card:hover .play-overlay-btn {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        @media (hover: none) {
-            .play-overlay-btn {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .play-overlay-btn:hover {
-            background-color: var(--primary-hover);
-            transform: scale(1.05);
+        .play-overlay-btn:active {
+            transform: scale(0.92);
         }
 
         .play-overlay-btn svg {
@@ -347,7 +324,7 @@
         }
 
         .song-info h3 {
-            font-size: 1rem;
+            font-size: 0.98rem;
             font-weight: 600;
             white-space: nowrap;
             overflow: hidden;
@@ -355,12 +332,12 @@
         }
 
         .song-info p {
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             color: var(--text-muted);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            margin-top: 4px;
+            margin-top: 3px;
         }
 
         .song-actions {
@@ -373,7 +350,7 @@
         }
 
         .duration {
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
         }
 
@@ -382,14 +359,14 @@
             border: none;
             color: var(--text-muted);
             cursor: pointer;
-            padding: 10px; /* Generous touch target */
-            border-radius: 10px;
+            padding: 8px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
+            min-width: 40px;
+            min-height: 40px;
             transition: color 0.2s, background-color 0.2s;
-            min-width: 44px;
-            min-height: 44px;
         }
 
         .action-btn:hover {
@@ -398,20 +375,21 @@
         }
 
         .action-btn svg {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             fill: currentColor;
         }
 
+        /* Upload Card */
         .upload-card {
             background-color: var(--surface-color);
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 28px;
-            max-width: 640px;
+            padding: 24px;
+            max-width: 600px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 18px;
         }
 
         .form-group {
@@ -427,15 +405,15 @@
         }
 
         .form-group input {
-            padding: 14px 16px;
+            padding: 12px 16px;
             background-color: var(--bg-color);
             border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: 10px;
             color: var(--text-main);
-            font-size: 1rem;
+            font-size: 0.95rem;
             outline: none;
+            min-height: 44px;
             transition: border-color 0.2s;
-            min-height: 48px;
         }
 
         .form-group input:focus {
@@ -447,26 +425,20 @@
             background-color: var(--primary);
             color: white;
             border: none;
-            padding: 14px 24px;
+            padding: 14px 20px;
             border-radius: 12px;
             font-weight: 600;
             font-size: 1rem;
             cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
             min-height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-hover);
+            transition: background-color 0.2s, transform 0.1s;
         }
 
         .btn-primary:active {
             transform: scale(0.98);
         }
 
+        /* Desktop Sticky Audio Player */
         .player-bar {
             position: fixed;
             bottom: 0;
@@ -478,8 +450,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 24px;
-            z-index: 100;
+            padding: 0 28px;
+            z-index: 1000;
             backdrop-filter: blur(16px);
         }
 
@@ -487,13 +459,12 @@
             display: flex;
             align-items: center;
             gap: 14px;
-            max-width: 300px;
-            flex: 1;
+            width: 280px;
         }
 
         .player-thumb {
-            width: 50px;
-            height: 50px;
+            width: 48px;
+            height: 48px;
             background: var(--border);
             border-radius: 10px;
             display: flex;
@@ -503,21 +474,22 @@
         }
 
         .player-thumb svg {
-            width: 24px;
-            height: 24px;
+            width: 22px;
+            height: 22px;
             fill: var(--text-muted);
         }
 
         .player-meta h4 {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 600;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            max-width: 200px;
         }
 
         .player-meta p {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: var(--text-muted);
             white-space: nowrap;
             overflow: hidden;
@@ -532,13 +504,12 @@
             gap: 6px;
             flex: 1;
             max-width: 520px;
-            margin: 0 20px;
         }
 
         .player-buttons {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 18px;
         }
 
         .control-btn {
@@ -549,9 +520,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: color 0.2s, transform 0.1s;
             min-width: 44px;
             min-height: 44px;
+            transition: color 0.2s, transform 0.1s;
         }
 
         .control-btn:hover {
@@ -559,14 +530,14 @@
         }
 
         .control-btn svg {
-            width: 24px;
-            height: 24px;
+            width: 22px;
+            height: 22px;
             fill: currentColor;
         }
 
         .control-btn.main-play {
-            width: 46px;
-            height: 46px;
+            width: 44px;
+            height: 44px;
             background-color: var(--primary);
             border-radius: 50%;
             color: white;
@@ -574,12 +545,11 @@
 
         .control-btn.main-play:hover {
             background-color: var(--primary-hover);
-            transform: scale(1.06);
         }
 
         .control-btn.main-play svg {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             fill: white;
             margin-left: 2px;
         }
@@ -587,14 +557,14 @@
         .progress-container {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             width: 100%;
         }
 
         .time-label {
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             color: var(--text-muted);
-            min-width: 36px;
+            min-width: 34px;
             text-align: center;
         }
 
@@ -605,49 +575,112 @@
             border-radius: 3px;
             position: relative;
             cursor: pointer;
-            padding: 6px 0; /* Expanded touch hit area vertically */
-            background-clip: content-box;
+            padding: 6px 0; /* Makes touch target bigger */
         }
 
-        .progress-bar-fill {
-            height: 6px;
-            background-color: var(--primary);
+        .progress-bar-inner {
+            width: 100%;
+            height: 100%;
+            background-color: var(--border);
             border-radius: 3px;
-            width: 0%;
             position: relative;
         }
 
-        /* Mobile Bottom Navigation Bar */
-        .mobile-nav {
+        .progress-bar-fill {
+            height: 100%;
+            background-color: var(--primary);
+            border-radius: 3px;
+            width: 0%;
+        }
+
+        /* Mobile Phone Bar (Bottom Nav + Dedicated Play/Stop) */
+        .mobile-bottom-bar {
             display: none;
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 64px;
             background-color: var(--surface-color);
             border-top: 1px solid var(--border);
-            padding: 0 8px;
-            justify-content: space-around;
+            z-index: 1001;
+            backdrop-filter: blur(16px);
+            flex-direction: column;
+        }
+
+        .mobile-player-strip {
+            display: flex;
             align-items: center;
-            z-index: 101;
-            backdrop-filter: blur(12px);
+            justify-content: space-between;
+            padding: 8px 16px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(18, 18, 22, 0.95);
+        }
+
+        .mobile-track-details {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            overflow: hidden;
+            flex: 1;
+            margin-right: 12px;
+        }
+
+        .mobile-track-details h4 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .mobile-track-details p {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .mobile-play-stop-btn {
+            width: 44px;
+            height: 44px;
+            background-color: var(--primary);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(139, 92, 246, 0.4);
+            flex-shrink: 0;
+        }
+
+        .mobile-play-stop-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+            margin-left: 1px;
+        }
+
+        .mobile-nav-links {
+            display: flex;
+            justify-content: space-around;
+            padding: 6px 0;
         }
 
         .mobile-nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            gap: 4px;
+            gap: 3px;
             background: none;
             border: none;
             color: var(--text-muted);
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             cursor: pointer;
             flex: 1;
-            height: 100%;
-            min-width: 44px;
+            min-height: 44px;
+            justify-content: center;
         }
 
         .mobile-nav-item.active {
@@ -655,8 +688,8 @@
         }
 
         .mobile-nav-item svg {
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             fill: currentColor;
         }
 
@@ -669,52 +702,34 @@
 
         .empty-state p {
             margin-top: 8px;
-            font-size: 0.95rem;
+            font-size: 0.92rem;
         }
 
+        /* Responsive Breakpoints */
         @media (max-width: 768px) {
             sidebar {
                 display: none;
             }
-            .mobile-nav {
+            .mobile-bottom-bar {
                 display: flex;
+            }
+            .player-bar {
+                display: none; /* Hide desktop bottom bar on mobile */
             }
             main {
                 padding: 16px;
-                padding-bottom: 24px;
             }
             .app-container {
-                /* Padding accounts for mobile-nav (64px) + player-bar (72px) */
-                padding-bottom: 145px; 
-            }
-            .player-bar {
-                bottom: 64px; /* Sits exactly above the mobile navigation bar */
-                height: 72px;
-                padding: 0 16px;
-            }
-            .player-track-info {
-                max-width: calc(100% - 70px);
-            }
-            .player-controls-center {
-                display: none; /* Streamlined mobile player player-bar view */
+                padding-bottom: 125px; /* Perfect space for mobile bottom bar */
             }
             .section-header h2 {
                 font-size: 1.6rem;
-            }
-            .scamlists-container {
-                grid-template-columns: 1fr;
             }
             .song-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 12px;
             }
-            .song-card {
-                padding: 12px;
-            }
-        }
-
-        @media (max-width: 380px) {
-            .song-grid {
+            .scamlists-container {
                 grid-template-columns: 1fr;
             }
         }
@@ -751,7 +766,7 @@
             </div>
         </sidebar>
 
-        <!-- Main Content Area -->
+        <!-- Main Workspace -->
         <main>
             <!-- Discover View -->
             <section id="view-discover" class="view-section active">
@@ -764,8 +779,8 @@
                 </div>
 
                 <!-- Scamlists Section -->
-                <div style="margin-bottom: 32px;">
-                    <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 16px;">Scamlists</h3>
+                <div style="margin-bottom: 24px;">
+                    <h3 style="font-size: 1.15rem; font-weight: 600; margin-bottom: 14px;">Scamlists</h3>
                     <div class="scamlists-container">
                         <div class="scamlist-card" onclick="openScamlist('uploaded')">
                             <div class="scamlist-thumb">
@@ -779,7 +794,7 @@
                     </div>
                 </div>
 
-                <h3 id="grid-title" style="font-size: 1.25rem; font-weight: 600; margin-bottom: 16px;">All Tracks</h3>
+                <h3 id="grid-title" style="font-size: 1.15rem; font-weight: 600; margin-bottom: 14px;">All Tracks</h3>
                 <div id="discover-grid" class="song-grid"></div>
             </section>
 
@@ -825,6 +840,7 @@
         </main>
     </div>
 
+    <!-- Desktop Sticky Audio Player Bar -->
     <div class="player-bar">
         <div class="player-track-info">
             <div class="player-thumb">
@@ -838,41 +854,57 @@
 
         <div class="player-controls-center">
             <div class="player-buttons">
-                <button class="control-btn" onclick="togglePlay()">
+                <button class="control-btn main-play" onclick="togglePlay()">
                     <svg id="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                 </button>
             </div>
             <div class="progress-container">
                 <span class="time-label" id="current-time">0:00</span>
                 <div class="progress-bar" id="progress-bar" onclick="seekAudio(event)">
-                    <div class="progress-bar-fill" id="progress-fill"></div>
+                    <div class="progress-bar-inner">
+                        <div class="progress-bar-fill" id="progress-fill"></div>
+                    </div>
                 </div>
                 <span class="time-label" id="duration-label">0:00</span>
             </div>
         </div>
 
-        <div style="width: 140px; display: flex; justify-content: flex-end; align-items: center;">
-            <button class="control-btn main-play" onclick="togglePlay()" id="mobile-play-btn" style="display:none;" title="Play/Pause">
-                <svg id="mobile-play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </button>
+        <div style="width: 280px; text-align: right;">
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Scamify Engine v2.5</span>
         </div>
     </div>
 
-    <!-- Mobile Bottom Navigation Bar -->
-    <nav class="mobile-nav">
-        <button class="mobile-nav-item active" id="m-btn-discover" onclick="switchView('discover', event)">
-            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-            Discover
-        </button>
-        <button class="mobile-nav-item" id="m-btn-upload" onclick="switchView('upload', event)">
-            <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm3-10.17L14.83 8H13v6h-2V8H9.17L12 5.83zM5 18h14v2H5v-2z"/></svg>
-            Upload
-        </button>
-        <button class="mobile-nav-item" id="m-btn-downloads" onclick="switchView('downloads', event)">
-            <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-            Downloads
-        </button>
-    </nav>
+    <!-- Mobile Bottom Navigation & Play/Stop Bar -->
+    <div class="mobile-bottom-bar">
+        <div class="mobile-player-strip">
+            <div class="mobile-track-details">
+                <div class="player-thumb" style="width: 38px; height: 38px; border-radius: 8px;">
+                    <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                </div>
+                <div>
+                    <h4 id="mobile-player-title">Select a track</h4>
+                    <p id="mobile-player-artist">FocuxHub</p>
+                </div>
+            </div>
+            <button class="mobile-play-stop-btn" onclick="togglePlay()">
+                <svg id="mobile-play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+        </div>
+        <div class="mobile-nav-links">
+            <button class="mobile-nav-item active" id="m-btn-discover" onclick="switchView('discover', event)">
+                <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                Discover
+            </button>
+            <button class="mobile-nav-item" id="m-btn-upload" onclick="switchView('upload', event)">
+                <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm3-10.17L14.83 8H13v6h-2V8H9.17L12 5.83zM5 18h14v2H5v-2z"/></svg>
+                Upload
+            </button>
+            <button class="mobile-nav-item" id="m-btn-downloads" onclick="switchView('downloads', event)">
+                <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                Downloads
+            </button>
+        </div>
+    </div>
 
     <audio id="audio-element"></audio>
 
@@ -971,6 +1003,8 @@
             currentPlayingSong = song;
             document.getElementById('player-title').innerText = song.title;
             document.getElementById('player-artist').innerText = song.artist;
+            document.getElementById('mobile-player-title').innerText = song.title;
+            document.getElementById('mobile-player-artist').innerText = song.artist;
 
             document.querySelectorAll('.song-card').forEach(c => c.classList.remove('playing'));
             const activeCard = document.getElementById(`card-${song.id}`);
@@ -989,7 +1023,7 @@
             }
 
             audioElement.play();
-            updatePlayButtonIcon(true);
+            updatePlayButtonIcons(true);
         }
 
         function togglePlay() {
@@ -1001,19 +1035,17 @@
 
             if (audioElement.paused) {
                 audioElement.play();
-                updatePlayButtonIcon(true);
+                updatePlayButtonIcons(true);
             } else {
                 audioElement.pause();
-                updatePlayButtonIcon(false);
+                updatePlayButtonIcons(false);
             }
         }
 
-        function updatePlayButtonIcon(isPlaying) {
-            const icon = document.getElementById('play-icon');
-            const mobileIcon = document.getElementById('mobile-play-icon');
-            const htmlMarkup = isPlaying ? '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>' : '<path d="M8 5v14l11-7z"/>';
-            if (icon) icon.innerHTML = htmlMarkup;
-            if (mobileIcon) mobileIcon.innerHTML = htmlMarkup;
+        function updatePlayButtonIcons(isPlaying) {
+            const iconHTML = isPlaying ? '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>' : '<path d="M8 5v14l11-7z"/>';
+            document.getElementById('play-icon').innerHTML = iconHTML;
+            document.getElementById('mobile-play-icon').innerHTML = iconHTML;
         }
 
         async function downloadSong(songId) {
